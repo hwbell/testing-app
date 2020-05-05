@@ -64,19 +64,26 @@ class SampleCard extends React.Component {
       this.setState({
         popoverMessage: tool,
       });
+    } else {
+      this.setState({
+        popoverMessage: null,
+      });
     }
-    this.setState({
-      popoverOpen: !this.state.popoverOpen,
-    });
+    // this.setState({
+    //   popoverOpen: !this.state.popoverOpen,
+    // });
   }
 
   renderHeatMap() {
-    const startDate = this.state.heatMapValues[0].date;
-    const endDate = this.state.heatMapValues[
+    const endDate = this.state.heatMapValues[0].date;
+    const startDate = this.state.heatMapValues[
       this.state.heatMapValues.length - 1
     ].date;
 
     console.log(this.state.heatMapValues);
+    console.log('rendering heatmap')
+    console.log(startDate)
+    console.log(endDate)
     return (
       <CalendarHeatmap
         startDate={new Date(startDate)}
@@ -90,7 +97,7 @@ class SampleCard extends React.Component {
         }}
         showWeekdayLabels={true}
         onClick={(value) =>
-          alert(`There were ${value.count} commits to this app on ${value.date}`)
+          value && alert(`There were ${value.count} commits to this app on ${value.date}`)
         }
       />
     );
@@ -133,14 +140,11 @@ class SampleCard extends React.Component {
             })}
           </div>
 
-          {/* <div style={{minHeight: '45px'}}>
-            <Fade in={this.state.popoverOpen} style={styles.fade}>
-              {this.state.popoverMessage}
-            </Fade>
-          </div> */}
+          <div>
+            App made with: <strong>{this.state.popoverMessage}</strong>
+          </div>
 
           {this.state.heatMapValues && this.renderHeatMap()}
-          <ReactTooltip/>
 
           
         </div>

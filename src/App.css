@@ -8,7 +8,14 @@
   justify-content: center;
   align-items: center;
 }
+.center-all-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 .center-all-row {
+  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -26,6 +33,7 @@
   justify-content: flex-start;
   align-items: flex-start;
 }
+
 .space-all-evenly-row {
   display: flex;
   flex-direction: row;
@@ -41,7 +49,8 @@
   /* box-shadow: -2px 2px 3px 1px rgba(65, 94, 158, 0.2); */
 }
 .react-calendar-heatmap {
-  margin: 25px 0;  
+  margin: 10px;  
+  max-height: 200px;
 }
 .react-calendar-heatmap text {
   font-size: 10px;
@@ -87,6 +96,24 @@
 }
 .react-calendar-heatmap .color-github-4 {
   fill: #1e6823;
+}
+.react-calendar-heatmap .color-github-5 {
+  fill: #288b7b;
+}
+.react-calendar-heatmap .color-github-6 {
+  fill: #28778b;
+}
+.react-calendar-heatmap .color-github-7 {
+  fill: #28538b;
+}
+.react-calendar-heatmap .color-github-8 {
+  fill: #28328b;
+}
+.react-calendar-heatmap .color-github-9 {
+  fill: #46288b;
+}
+.react-calendar-heatmap .color-github-10 {
+  fill: #8b2886;
 }
 
 /*

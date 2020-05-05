@@ -2,7 +2,7 @@
 // a83b6cb793cf1555c384d6e6dabdf760f0a53bcf
 
 const fetch = require('node-fetch');
-const token = 'a83b6cb793cf1555c384d6e6dabdf760f0a53bcf';
+const token = process.env.REACT_APP_GIT_TOKEN;
 const headers = {
   Authorization: `Bearer ${token}`,
   Accept: 'application/json',
@@ -27,14 +27,10 @@ const transformRepoData = (data) => {
 
   let transform = []
 
+  // use this instead of i, since if we find the same date we won't increment
+  let ind = 0;
+  
   data.forEach((obj) => {
-
-    console.log(obj.commit.author.date.slice(0, 10))
-    transform.push({
-      date: obj.commit.author.date.slice(0, 10),
-      count: 1
-    })
-
     // // to work with the past year api data, week by week
     // obj.days.forEach((day, i) => {
     //   // let date = moment(obj.week * 1000 + (i * 86400000)).format();
@@ -44,21 +40,56 @@ const transformRepoData = (data) => {
     //   // })
 
     // });
+    // console.log(obj.commit.author.date.slice(0, 10))
 
+    // to work with the full commits list
+
+
+    if (ind > 0) {
+      if (obj.commit.author.date.slice(0, 10) == data[ind - 1].commit.author.date.slice(0, 10)) {
+        console.log(transform)
+        console.log(ind)
+        transform[ind - 1].count++;
+      } else {
+        transform.push({
+          date: obj.commit.author.date.slice(0, 10),
+          count: 1
+        });
+        ind++;
+      }
+    } else {
+      transform.push({
+        date: obj.commit.author.date.slice(0, 10),
+        count: 1
+      });
+      ind++
+    }
+   
   });
   return transform;
 }
 export default async function getRepoInfo(repo) {
-  let serverResponse = await fetch(`${serverUrl}/repos/hwbell/${repo}/commits`, {
-    method: 'GET',
-    headers
-  })
-    .then(response => response.json())
-    .then((json) => {
-      console.log(json)
-      return transformRepoData(json);
+  let serverResponse;
+
+  if (localStorage.getItem(repo) == "undefined" || localStorage.getItem(repo) == null) {
+    serverResponse = await fetch(`${serverUrl}/repos/hwbell/${repo}/commits`, {
+      method: 'GET',
+      // headers
     })
-    .catch(err => console.log(err))
+      .then(response => response.json())
+      .then((json) => {
+        console.log('from API:')
+        console.log(json)
+        return transformRepoData(json);
+      })
+      .catch(err => console.log(err))
+
+    localStorage.setItem(`${repo}`, JSON.stringify(serverResponse));
+  }
+  else {
+    console.log(`getting ${repo} info from local storage:`)
+    serverResponse = JSON.parse(localStorage.getItem(repo));
+  }
 
   return serverResponse;
 }
